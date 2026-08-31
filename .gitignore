@@ -1,0 +1,10 @@
+# NADA de credenciales ni datos de participantes en este repo: es PÚBLICO.
+config.json
+.upload_state.json
+.sitio_sha
+*.wav
+*.opus
+*.npy
+*.npz
+*_bak_*
+.DS_Store

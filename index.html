@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>El lenguaje del corazón — archivo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ── sistema ──────────────────────────────────────────────────────────────────
+   Tinta y papel: fondo casi negro con un dejo cálido, texto que tira a pergamino,
+   y un único color fuerte, el del pulso. Así los gráficos de ECG —que son la
+   materia del archivo— no compiten con la interfaz.                            */
+:root{
+  --tinta:#0e0d10;  --tinta2:#141317; --papel:#181720; --linea:#272531;
+  --texto:#ece7dd;  --tenue:#948da0;  --suave:#c9c2d4;
+  --pulso:#e0574f;  --calma:#6fbfa0;
+  --r:14px; --sombra:0 1px 2px rgba(0,0,0,.5), 0 8px 24px -12px rgba(0,0,0,.7);
+  --serif:"Fraunces",Georgia,"Times New Roman",serif;
+  --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--tinta); color:var(--texto); font:15px/1.6 var(--sans); -webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:var(--serif); font-weight:600; letter-spacing:-.01em; margin:0}
+a{color:inherit}
+::selection{background:var(--pulso); color:#fff}
+
+/* ── cabecera ─────────────────────────────────────────────────────────────── */
+header{position:sticky; top:0; z-index:20; display:flex; align-items:center; gap:14px;
+  padding:14px 22px; border-bottom:1px solid var(--linea);
+  background:rgba(14,13,16,.86); backdrop-filter:blur(12px)}
+header .marca{display:flex; align-items:center; gap:11px; min-width:0}
+header h1{font-size:16.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+header .sub{color:var(--tenue); font-size:12px; margin-top:1px}
+header .sp{flex:1}
+.latido{width:34px; height:20px; flex:none; overflow:visible}
+.latido path{fill:none; stroke:var(--pulso); stroke-width:1.8; stroke-linecap:round;
+  stroke-linejoin:round; stroke-dasharray:64; stroke-dashoffset:64;
+  animation:trazo 2.6s cubic-bezier(.6,.05,.3,1) infinite}
+@keyframes trazo{0%{stroke-dashoffset:64} 45%{stroke-dashoffset:0}
+  75%{stroke-dashoffset:0; opacity:1} 100%{stroke-dashoffset:0; opacity:0}}
+@media (prefers-reduced-motion:reduce){.latido path{animation:none; stroke-dashoffset:0}}
+
+/* ── controles ────────────────────────────────────────────────────────────── */
+button{font:inherit; font-weight:600; cursor:pointer; background:var(--pulso); color:#fff;
+  border:0; border-radius:10px; padding:10px 16px; transition:filter .15s, transform .06s}
+button:hover{filter:brightness(1.08)}
+button:active{transform:translateY(1px)}
+button:disabled{opacity:.6; cursor:default}
+button.fantasma{background:transparent; color:var(--suave); border:1px solid var(--linea); font-weight:500}
+button.fantasma:hover{border-color:var(--tenue); color:var(--texto); filter:none}
+input{width:100%; font:inherit; color:var(--texto); background:#0a090c;
+  border:1px solid var(--linea); border-radius:10px; padding:11px 13px}
+input:focus{outline:none; border-color:var(--pulso); box-shadow:0 0 0 3px rgba(224,87,79,.16)}
+
+/* ── entrada ──────────────────────────────────────────────────────────────── */
+.entrada{max-width:370px; margin:14vh auto; padding:0 20px}
+.entrada .caja{background:var(--papel); border:1px solid var(--linea); border-radius:18px;
+  padding:30px; box-shadow:var(--sombra)}
+.entrada h2{font-size:24px; margin-bottom:6px}
+.entrada p{color:var(--tenue); font-size:13.5px; margin:0 0 22px}
+.entrada label{display:block; font-size:12px; color:var(--tenue); margin:14px 0 6px; letter-spacing:.02em}
+.err{color:#ff9b95; font-size:13px; min-height:20px; margin-top:12px}
+
+/* ── estructura ───────────────────────────────────────────────────────────── */
+.marco{max-width:1160px; margin:0 auto; padding:26px 22px 80px}
+.dos{display:grid; grid-template-columns:250px 1fr; gap:26px; align-items:start}
+nav.lista{position:sticky; top:74px}
+nav.lista .rotulo{font-size:11px; color:var(--tenue); letter-spacing:.1em;
+  text-transform:uppercase; margin:0 0 10px 12px}
+nav.lista ul{list-style:none; margin:0 0 20px; padding:0}
+nav.lista li{padding:9px 12px; border-radius:9px; cursor:pointer; color:var(--suave);
+  font-size:14px; display:flex; gap:9px; align-items:center; transition:background .12s, color .12s}
+nav.lista li:hover{background:var(--tinta2); color:var(--texto)}
+nav.lista li.sel{background:var(--papel); color:var(--texto); box-shadow:inset 2px 0 0 var(--pulso)}
+nav.lista li .ic{width:16px; text-align:center; opacity:.75; flex:none}
+nav.lista li .n{margin-left:auto; font-size:11px; color:var(--tenue); font-variant-numeric:tabular-nums}
+
+/* ── piezas ───────────────────────────────────────────────────────────────── */
+.pieza{background:var(--papel); border:1px solid var(--linea); border-radius:var(--r);
+  padding:18px 20px; margin-bottom:16px}
+.pieza.aire{padding:24px 24px 22px}
+.titular{font-size:26px; margin-bottom:4px}
+.bajada{color:var(--tenue); font-size:13.5px}
+.seccion{font-size:11px; letter-spacing:.11em; text-transform:uppercase; color:var(--tenue);
+  margin:30px 0 12px; display:flex; align-items:center; gap:12px}
+.seccion::after{content:""; flex:1; height:1px; background:var(--linea)}
+.seccion em{font-style:normal; text-transform:none; letter-spacing:0; color:#6f6879; font-size:12px}
+
+.toma{background:var(--tinta2); border:1px solid var(--linea); border-radius:var(--r);
+  padding:18px 20px; margin-bottom:14px}
+.toma h3{font-size:17px; margin-bottom:3px}
+.toma .cuando{color:var(--tenue); font-size:12.5px; font-variant-numeric:tabular-nums}
+
+.cifras{display:flex; flex-wrap:wrap; margin:15px 0 4px; border-top:1px solid var(--linea); padding-top:14px}
+.cifra{min-width:88px; flex:1 1 88px; padding-right:12px}
+.cifra .v{font-family:var(--serif); font-size:20px; font-variant-numeric:tabular-nums; line-height:1.2}
+.cifra .k{font-size:10.5px; color:var(--tenue); letter-spacing:.07em; text-transform:uppercase; margin-top:2px}
+.cifra.nulo .v{color:#585262}
+
+.dicho{color:var(--suave); font-size:13.5px; font-style:italic; font-family:var(--serif);
+  margin-top:14px; padding-left:14px; border-left:2px solid var(--linea); max-height:96px; overflow:auto}
+.laminas{display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:10px; margin-top:14px}
+figure{margin:0}
+figcaption{font-size:10.5px; color:var(--tenue); letter-spacing:.06em; text-transform:uppercase; margin-bottom:5px}
+img.lamina{width:100%; display:block; border:1px solid var(--linea); border-radius:9px; background:#000}
+audio{width:100%; margin-top:9px; height:34px}
+.pista{font-size:11px; color:var(--tenue); margin-top:12px}
+.baja{display:inline-flex; align-items:center; gap:6px; color:var(--suave); font-size:12.5px;
+  text-decoration:none; border:1px solid var(--linea); border-radius:8px; padding:7px 12px; margin-top:12px}
+.baja:hover{border-color:var(--pulso); color:var(--texto)}
+.tenue{color:var(--tenue)}
+.vacio{color:var(--tenue); font-size:13.5px; padding:8px 2px}
+
+/* ── teléfono ─────────────────────────────────────────────────────────────── */
+@media (max-width:800px){
+  .marco{padding:18px 15px 60px}
+  .dos{grid-template-columns:1fr; gap:16px}
+  nav.lista{position:static}
+  nav.lista .rotulo{margin-left:2px}
+  nav.lista ul{display:flex; gap:8px; overflow-x:auto; padding-bottom:6px; margin-bottom:12px;
+    scrollbar-width:none; -webkit-overflow-scrolling:touch}
+  nav.lista ul::-webkit-scrollbar{display:none}
+  nav.lista li{flex:none; white-space:nowrap; background:var(--tinta2); box-shadow:none}
+  nav.lista li.sel{box-shadow:inset 0 -2px 0 var(--pulso)}
+  nav.lista li .n{display:none}
+  .titular{font-size:22px}
+  .laminas{grid-template-columns:1fr}
+  header{padding:12px 15px}
+}
+</style>
+</head>
+<body>
+
+<script>
+  const SUPABASE_URL      = "https://vdeelmcpfiterpqdoccy.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_uw8my_6i3gZWRqFIw1AFGw_-cr3cUTH";
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<div id="app"></div>
+
+<script>
+const sb  = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const app = document.getElementById("app");
+const esc = s => (s ?? "").toString().replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const num = (v, d = 1) => v == null ? "—" : Number(v).toFixed(d);
+const LATIDO = '<svg class="latido" viewBox="0 0 34 20" aria-hidden="true"><path d="M0 10h7l2.5-7 4 14 3.5-9 2.5 4h3l2-3 2 3h7"/></svg>';
+
+// una URL firmada, o null si el archivo no está
+async function firmar(bucket, key, seg) {
+  if (!key || key === "None") return null;
+  const { data } = await sb.storage.from(bucket).createSignedUrl(key, seg || 3600);
+  return data ? data.signedUrl : null;
+}
+const fecha = t => t ? new Date(t).toLocaleString("es-CL", { dateStyle:"medium", timeStyle:"short" }) : "";
+
+async function boot() {
+  const { data:{ session } } = await sb.auth.getSession();
+  session ? renderApp() : renderLogin();
+}
+
+/* ── entrada ───────────────────────────────────────────────────────────────── */
+function renderLogin(err) {
+  app.innerHTML = `
+    <div class="entrada"><div class="caja">
+      <div style="margin-bottom:14px">${LATIDO}</div>
+      <h2>El lenguaje del corazón</h2>
+      <p>Archivo privado del proyecto: pulso, voz y las hojas que salen de cada sesión.</p>
+      <label for="em">Email</label><input id="em" type="email" autocomplete="username">
+      <label for="pw">Contraseña</label><input id="pw" type="password" autocomplete="current-password">
+      <div style="margin-top:20px"><button id="go" style="width:100%">Entrar</button></div>
+      <div class="err">${esc(err || "")}</div>
+    </div></div>`;
+  const entrar = async () => {
+    const b = document.getElementById("go");
+    b.disabled = true; b.textContent = "Entrando…";
+    const { error } = await sb.auth.signInWithPassword({
+      email: document.getElementById("em").value.trim(),
+      password: document.getElementById("pw").value });
+    error ? renderLogin(error.message) : renderApp();
+  };
+  document.getElementById("go").onclick = entrar;
+  document.getElementById("pw").addEventListener("keydown", e => e.key === "Enter" && entrar());
+  document.getElementById("em").focus();
+}
+
+/* ── armazón ───────────────────────────────────────────────────────────────── */
+async function renderApp() {
+  app.innerHTML = `
+    <header>
+      <div class="marca">${LATIDO}
+        <div><h1>El lenguaje del corazón</h1>
+             <div class="sub">archivo de sesiones</div></div></div>
+      <div class="sp"></div>
+      <button class="fantasma" id="salir">Salir</button>
+    </header>
+    <div class="marco"><div class="dos">
+      <nav class="lista">
+        <div class="rotulo">El archivo</div><ul id="fijos"></ul>
+        <div class="rotulo">Personas</div><ul id="gente"><li class="tenue">Cargando…</li></ul>
+      </nav>
+      <main id="hoja"></main>
+    </div></div>`;
+  document.getElementById("salir").onclick = async () => { await sb.auth.signOut(); renderLogin(); };
+
+  document.getElementById("fijos").innerHTML =
+      '<li data-v="colectivo" class="sel"><span class="ic">◆</span>Viaje colectivo</li>'
+    + '<li data-v="respaldos"><span class="ic">⛁</span>Respaldos</li>';
+
+  const { data:ps, error } = await sb.from("participants").select("*");
+  const ul = document.getElementById("gente");
+  if (error) { ul.innerHTML = `<li class="err">${esc(error.message)}</li>`; return; }
+
+  // cuántas sesiones tiene cada quien: ordena la lista por peso del registro
+  const { data:todas } = await sb.from("sessions").select("participant_id");
+  const cuenta = {};
+  (todas || []).forEach(s => { cuenta[s.participant_id] = (cuenta[s.participant_id] || 0) + 1; });
+  ps.sort((a, b) => (cuenta[b.id] || 0) - (cuenta[a.id] || 0)
+                 || (a.alias || "").localeCompare(b.alias || ""));
+
+  ul.innerHTML = ps.length
+    ? ps.map(p => `<li data-id="${p.id}"><span>${esc(p.alias)}</span>
+                     <span class="n">${cuenta[p.id] || 0}</span></li>`).join("")
+    : '<li class="tenue">Sin participantes.</li>';
+
+  const items = () => document.querySelectorAll("nav.lista li[data-v], nav.lista li[data-id]");
+  items().forEach(li => { li.onclick = () => {
+    items().forEach(x => x.classList.remove("sel"));
+    li.classList.add("sel");
+    window.scrollTo({ top:0, behavior:"smooth" });
+    if (li.dataset.v === "colectivo")      verColectivo();
+    else if (li.dataset.v === "respaldos") verRespaldos();
+    else verPersona(li.dataset.id, ps.find(p => p.id === li.dataset.id));
+  }; });
+  verColectivo();
+}
+
+/* ── viaje colectivo ───────────────────────────────────────────────────────── */
+async function verColectivo() {
+  const h = document.getElementById("hoja");
+  h.innerHTML = `<div class="pieza aire">
+      <h2 class="titular">El viaje colectivo</h2>
+      <div class="bajada">Cada corazón va de ○ (donde empezó) a ● (donde terminó) su sesión
+      escuchándose. En verde, los que se movieron hacia la calma.</div></div>
+    <div id="lams"></div>`;
+  const lams = [["_colectivo_lfhf.png", "LF/HF (balance autonómico) vs RMSSD (tono vagal)"],
+                ["_colectivo_hr.png",   "Frecuencia cardíaca vs RMSSD"]];
+  let out = "";
+  for (const par of lams) {
+    const u = await firmar("viaje", par[0]);
+    if (u) out += `<div class="pieza"><div class="seccion" style="margin-top:0">${par[1]}</div>
+        <a href="${u}" target="_blank" rel="noopener"><img class="lamina" src="${u}" alt="${par[1]}"></a></div>`;
+  }
+  document.getElementById("lams").innerHTML = out ||
+    '<div class="pieza vacio">Todavía no hay láminas del viaje colectivo.</div>';
+}
+
+/* ── respaldos ─────────────────────────────────────────────────────────────── */
+async function verRespaldos() {
+  const h = document.getElementById("hoja");
+  h.innerHTML = `<div class="pieza aire">
+      <h2 class="titular">Respaldos del instrumento</h2>
+      <div class="bajada">Cada ZIP trae el código completo para volver a levantar ecgmax:
+      los .maxpat, los .js, los .py, la web y el requirements.txt. No incluye la librería
+      VSCO-2, el venv ni las grabaciones. Se sube solo los lunes; se guardan los 12 últimos.</div>
+    </div><div id="zips" class="vacio">Cargando…</div>`;
+  const { data:objs, error } = await sb.storage.from("backups")
+    .list("", { limit:100, sortBy:{ column:"name", order:"desc" } });
+  const cont = document.getElementById("zips");
+  if (error) { cont.innerHTML = `<div class="pieza err">${esc(error.message)}</div>`; return; }
+  const zips = (objs || []).filter(o => o.name.endsWith(".zip"));
+  if (!zips.length) { cont.innerHTML = '<div class="pieza vacio">Todavía no hay respaldos.</div>'; return; }
+  let out = "";
+  for (const o of zips) {
+    const u  = await firmar("backups", o.name);
+    const mb = ((o.metadata && o.metadata.size) || 0) / 1e6;
+    const m  = o.name.match(/(\d{4})(\d{2})(\d{2})_(\d{2})(\d{2})/);
+    out += `<div class="toma"><h3>${esc(o.name)}</h3>
+      <div class="cuando">${m ? m[3] + "/" + m[2] + "/" + m[1] + " · " + m[4] + ":" + m[5] : ""} · ${mb.toFixed(2)} MB</div>
+      ${u ? `<a class="baja" href="${u}" download>⬇ descargar ZIP</a>` : '<span class="tenue">sin enlace</span>'}</div>`;
+  }
+  cont.className = ""; cont.innerHTML = out;
+}
+
+/* ── una persona ───────────────────────────────────────────────────────────── */
+async function verPersona(pid, p) {
+  const h = document.getElementById("hoja");
+  h.innerHTML = '<div class="pieza vacio">Cargando sesiones…</div>';
+  const { data:ses, error } = await sb.from("sessions")
+    .select("*, hrv_metrics(*)").eq("participant_id", pid)
+    .order("recorded_at", { ascending:false });
+  if (error) { h.innerHTML = `<div class="pieza err">${esc(error.message)}</div>`; return; }
+
+  // Las sesiones CON registro cardíaco van separadas de los audios sueltos (voz grabada
+  // sin ECG en paralelo). Mezclados costaba ver cuáles eran sesiones de verdad.
+  const conEcg  = ses.filter(s => s.ecg_raw_path);
+  const soloAud = ses.filter(s => !s.ecg_raw_path);
+  const minutos = ses.reduce((a, s) => a + (s.audio_duration_s || 0), 0) / 60;
+
+  h.innerHTML = `
+    <div class="pieza aire">
+      <h2 class="titular">${esc(p.alias)}</h2>
+      <div class="bajada">${p.consent ? "✓ con consentimiento" : "⚠ sin consentimiento registrado"}
+        · ${ses.length} sesión(es)${minutos >= 1 ? " · " + minutos.toFixed(0) + " min de voz" : ""}</div>
+      ${p.notes ? `<div class="dicho">${esc(p.notes)}</div>` : ""}
+    </div>
+    <div id="hojas"></div>
+    ${bloque(conEcg,  "Sesiones con ECG", "")}
+    ${bloque(soloAud, "Audios sin ECG", "voz grabada sin registro cardíaco en paralelo")}
+    ${ses.length ? "" : '<div class="pieza vacio">Sin sesiones.</div>'}`;
+
+  // hojas del participante (escritura del pulso · viaje)
+  let hs = "";
+  const hojas = [["escritura_path", "escritura", "Hoja de escritura — el lenguaje del pulso"],
+                 ["viaje_path",     "viaje",     "Hoja del viaje — VFC en el tiempo"]];
+  for (const t of hojas) {
+    const u = await firmar(t[1], p[t[0]]);
+    if (u) hs += `<div class="pieza"><div class="seccion" style="margin-top:0">${t[2]}</div>
+        <a href="${u}" target="_blank" rel="noopener"><img class="lamina" src="${u}" alt="${t[2]}"></a></div>`;
+  }
+  document.getElementById("hojas").innerHTML = hs;
+
+  for (const s of ses) await colgarMedios(pid, s);
+}
+
+function bloque(lista, titulo, nota) {
+  if (!lista.length) return "";
+  return `<div class="seccion">${titulo} (${lista.length})${nota ? " <em>· " + nota + "</em>" : ""}</div>`
+       + lista.map(tarjeta).join("");
+}
+
+function tarjeta(s) {
+  const m = (Array.isArray(s.hrv_metrics) ? s.hrv_metrics[0] : s.hrv_metrics) || {};
+  const hay = Object.keys(m).length;
+  const cif = (k, v, d) => `<div class="cifra${v == null ? " nulo" : ""}">
+      <div class="v">${num(v, d == null ? 1 : d)}</div><div class="k">${k}</div></div>`;
+  return `<div class="toma">
+    <h3>${esc(s.name || "sesión")}</h3>
+    <div class="cuando">${fecha(s.recorded_at)}${
+      s.audio_duration_s ? " · " + Math.round(s.audio_duration_s) + " s de voz" : ""}${
+      s.word_count ? " · " + s.word_count + " palabras" : ""}</div>
+    <div id="im-${s.id}"></div>
+    <div id="au-${s.id}"></div>
+    ${hay ? `<div class="cifras">
+        ${cif("RMSSD", m.rmssd)}${cif("SDNN", m.sdnn)}${cif("Pulso", m.mean_hr, 0)}
+        ${cif("LF/HF", m.lf_hf, 2)}${cif("pNN50", m.pnn50)}
+        <div class="cifra"><div class="v">${m.n_beats == null ? "—" : m.n_beats}</div>
+          <div class="k">Latidos</div></div>
+      </div>` : '<div class="pista">sin índices de VFC para esta toma</div>'}
+    ${s.transcript ? `<div class="dicho">${esc(s.transcript)}</div>` : ""}
+    <div id="ec-${s.id}"></div>
+  </div>`;
+}
+
+// imágenes, audios y descarga del ECG — por URL firmada, después de pintar la tarjeta
+async function colgarMedios(pid, s) {
+  const paneles = [["render","render cardíaco"],["huella","huella"],["tacograma","tacograma"],
+                   ["crudo","ECG crudo"],["salud","salud"],["firma","firma"]];
+  let lams = "";
+  for (const par of paneles) {
+    const u = await firmar("shots", pid + "/" + s.name + "_" + par[0] + ".png");
+    if (u) lams += `<figure><figcaption>${par[1]}</figcaption>
+        <a href="${u}" target="_blank" rel="noopener"><img class="lamina" src="${u}" alt="${par[1]}"></a></figure>`;
+  }
+  const cIm = document.getElementById("im-" + s.id);
+  if (!cIm) return;
+  if (lams) cIm.innerHTML = `<div class="laminas">${lams}</div>`;
+  else {
+    const u = await firmar("shots", s.image_path);
+    if (u) cIm.innerHTML = `<div class="laminas"><figure>
+        <a href="${u}" target="_blank" rel="noopener"><img class="lamina" src="${u}" alt="captura de la sesión"></a></figure></div>`;
+  }
+
+  let au = "";
+  const voz = await firmar("audio", s.audio_path);
+  if (voz) au += `<div class="pista">voz de la persona</div><audio controls preload="none" src="${voz}"></audio>`;
+  const son = await firmar("audio", pid + "/" + s.name + "_sonido.opus");
+  if (son) au += `<div class="pista">sonido del corazón — la sonificación que escuchó</div>
+                  <audio controls preload="none" src="${son}"></audio>`;
+  document.getElementById("au-" + s.id).innerHTML = au;
+
+  const ecg = await firmar("ecg-raw", s.ecg_raw_path);
+  if (ecg) document.getElementById("ec-" + s.id).innerHTML =
+    `<a class="baja" href="${ecg}" download>⬇ ECG crudo (.npy)</a>`;
+}
+
+boot();
+</script>
+</body>
+</html>
