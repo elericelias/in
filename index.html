@@ -399,8 +399,10 @@ function tarjeta(s) {
 
 // imágenes, audios y descarga del ECG — por URL firmada, después de pintar la tarjeta
 async function colgarMedios(pid, s) {
-  const paneles = [["render","render cardíaco"],["huella","huella"],["tacograma","tacograma"],
-                   ["crudo","ECG crudo"],["salud","salud"],["firma","firma"]];
+  // Cada registro muestra SOLO su trazado: el ECG y, si se grabó, el EGG del estómago.
+  // La huella, el tacograma, el render y la respiración no se repiten acá — todos ya
+  // están en la hoja del viaje, arriba, y duplicarlos alargaba la página sin agregar nada.
+  const paneles = [["crudo", "electrocardiograma"], ["egg", "electrogastrograma"]];
   let lams = "";
   for (const par of paneles) {
     const u = await firmar("shots", pid + "/" + s.name + "_" + par[0] + ".png");
