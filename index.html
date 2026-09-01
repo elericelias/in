@@ -271,11 +271,56 @@ async function renderApp() {
     items().forEach(x => x.classList.remove("sel"));
     li.classList.add("sel");
     window.scrollTo({ top:0, behavior:"smooth" });
-    if (li.dataset.v === "colectivo")      verColectivo();
+    if (li.dataset.v === "portada")        verPortada();
+    else if (li.dataset.v === "colectivo") verColectivo();
     else if (li.dataset.v === "respaldos") verRespaldos();
     else verPersona(li.dataset.id, ps.find(p => p.id === li.dataset.id));
   }; });
-  verColectivo();
+  verPortada();
+}
+
+/* ── portada ───────────────────────────────────────────────────────────────── */
+async function verPortada() {
+  const h = document.getElementById("hoja");
+  h.innerHTML = `
+    <div class="pieza aire portada">
+      <h2 class="titular">Buscar el lenguaje del corazón</h2>
+      <p>Un corazón nunca late dos veces igual. Entre un latido y el siguiente hay
+      diferencias de milisegundos, y en la forma de cada onda hay variaciones mínimas que
+      cambian con la respiración, con el susto, con la calma, con lo que se está recordando.
+      Este proyecto parte de tomar esas variaciones en serio: no como ruido alrededor de un
+      promedio, sino como algo que podría estar diciendo algo.</p>
+
+      <p>La pregunta tiene fundamento. El corazón tiene su propio sistema nervioso —unas
+      cuarenta mil neuronas— y cerca del 80% de las fibras del nervio vago van del corazón
+      hacia el cerebro, no al revés. Habla más de lo que escucha.</p>
+
+      <p>Cada sesión de este archivo funciona así: se registra el electrocardiograma de una
+      persona mientras el instrumento traduce su propio pulso a sonido en tiempo real. Ella
+      escucha su corazón, y ese escuchar le cambia el pulso, que cambia el sonido. Además
+      dice palabras en voz alta, que quedan marcadas en el tiempo del registro para poder
+      preguntarse después qué movió cuál.</p>
+
+      <p>En paralelo, cada latido se transcribe. Un análisis no supervisado encuentra que
+      las formas de onda se agrupan en unas pocas <b>letras</b> recurrentes, esas letras se
+      encadenan con una gramática propia, y de ahí sale una escritura del pulso. Los
+      calificativos vienen del <b>mapudungún</b>: piwke es corazón, y la lengua tiene un
+      vocabulario para el movimiento y la textura que el castellano técnico no tiene.</p>
+
+      <div id="alfabeto"></div>
+
+      <p class="cierre">Lo que ves acá es el archivo de ese trabajo: por persona, su
+      electrocardiograma, su voz, los índices de variabilidad, la hoja del viaje y el poema
+      que dictó su pulso.</p>
+    </div>`;
+  const u = await firmar("viaje", "_alfabeto_pulso.png");
+  if (u) document.getElementById("alfabeto").innerHTML = `
+    <figure class="alfa">
+      <a href="${u}" target="_blank" rel="noopener"><img class="lamina" src="${u}"
+         alt="el alfabeto del pulso: doce letras encontradas en 6501 latidos"></a>
+      <figcaption>El alfabeto encontrado en 6.501 latidos: doce formas de onda recurrentes,
+      su gramática (qué letra sigue a cuál) y un pulso ya escrito con ellas.</figcaption>
+    </figure>`;
 }
 
 /* ── viaje colectivo ───────────────────────────────────────────────────────── */
