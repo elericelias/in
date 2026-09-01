@@ -244,7 +244,7 @@ async function renderApp() {
   document.getElementById("salir").onclick = async () => { await sb.auth.signOut(); renderLogin(); };
 
   document.getElementById("fijos").innerHTML =
-      '<li data-v="colectivo" class="sel"><span class="ic">◆</span>Viaje colectivo</li>'
+      '<li data-v="portada" class="sel"><span class="ic">❦</span>El proyecto</li>'
     + '<li data-v="respaldos"><span class="ic">⛁</span>Respaldos</li>';
 
   const { data:ps, error } = await sb.from("participants").select("*");
