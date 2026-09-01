@@ -258,10 +258,13 @@ async function renderApp() {
   ps.sort((a, b) => (cuenta[b.id] || 0) - (cuenta[a.id] || 0)
                  || (a.alias || "").localeCompare(b.alias || ""));
 
-  ul.innerHTML = ps.length
-    ? ps.map(p => `<li data-id="${p.id}"><span>${esc(titulo(p.alias))}</span>
-                     <span class="n">${cuenta[p.id] || 0}</span></li>`).join("")
-    : '<li class="tenue">Sin participantes.</li>';
+  // El viaje colectivo encabeza la lista de personas: es lo que todas hicieron juntas,
+  // así que pertenece a ese grupo y no al del archivo.
+  ul.innerHTML = '<li data-v="colectivo"><span class="ic">◆</span>Viaje colectivo</li>'
+    + (ps.length
+      ? ps.map(p => `<li data-id="${p.id}"><span>${esc(titulo(p.alias))}</span>
+                       <span class="n">${cuenta[p.id] || 0}</span></li>`).join("")
+      : '<li class="tenue">Sin participantes.</li>');
 
   const items = () => document.querySelectorAll("nav.lista li[data-v], nav.lista li[data-id]");
   items().forEach(li => { li.onclick = () => {
