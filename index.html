@@ -229,7 +229,7 @@ async function renderApp() {
                  || (a.alias || "").localeCompare(b.alias || ""));
 
   ul.innerHTML = ps.length
-    ? ps.map(p => `<li data-id="${p.id}"><span>${esc(p.alias)}</span>
+    ? ps.map(p => `<li data-id="${p.id}"><span>${esc(titulo(p.alias))}</span>
                      <span class="n">${cuenta[p.id] || 0}</span></li>`).join("")
     : '<li class="tenue">Sin participantes.</li>';
 
@@ -309,11 +309,17 @@ async function verPersona(pid, p) {
 
   h.innerHTML = `
     <div class="pieza aire">
-      <h2 class="titular">${esc(p.alias)}</h2>
-      <div class="bajada">${p.consent ? "✓ con consentimiento" : "⚠ sin consentimiento registrado"}
-        · ${ses.length} sesión(es)${minutos >= 1 ? " · " + minutos.toFixed(0) + " min de voz" : ""}</div>
-      ${p.notes ? `<div class="dicho">${esc(p.notes)}</div>` : ""}
+      <div class="cabecera">
+        <div class="quien">
+          <h2 class="titular">${esc(titulo(p.alias))}</h2>
+          <div class="bajada">${p.consent ? "✓ con consentimiento" : "⚠ sin consentimiento registrado"}
+            · ${ses.length} sesión(es)${minutos >= 1 ? " · " + minutos.toFixed(0) + " min de voz" : ""}</div>
+          ${p.notes ? `<div class="dicho">${esc(p.notes)}</div>` : ""}
+        </div>
+        <div id="firma-${pid}" class="firma"></div>
+      </div>
     </div>
+    <div id="poemas"></div>
     <div id="hojas"></div>
     ${bloque(conEcg,  "Sesiones con ECG", "")}
     ${bloque(soloAud, "Audios sin ECG", "voz grabada sin registro cardíaco en paralelo")}
