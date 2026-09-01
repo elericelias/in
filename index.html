@@ -115,6 +115,36 @@ audio{width:100%; margin-top:9px; height:34px}
 .tenue{color:var(--tenue)}
 .vacio{color:var(--tenue); font-size:13.5px; padding:8px 2px}
 
+/* cabecera de persona: nombre a la izquierda, firma cardíaca a la derecha */
+.cabecera{display:flex; gap:22px; align-items:flex-start}
+.cabecera .quien{flex:1; min-width:0}
+.firma{flex:none; width:190px; text-align:center}
+.firma img{width:100%; display:block; border:1px solid var(--linea); border-radius:10px; background:#000}
+.firma .pie{font-size:10.5px; color:var(--tenue); letter-spacing:.06em;
+  text-transform:uppercase; margin-top:6px}
+
+/* poemas plegados: no se abren solos */
+details.plegable{padding:0; overflow:hidden}
+details.plegable summary{list-style:none; cursor:pointer; padding:16px 20px;
+  display:flex; align-items:center; gap:10px; font-family:var(--serif); font-size:16px}
+details.plegable summary::-webkit-details-marker{display:none}
+details.plegable summary .ic{color:var(--pulso)}
+details.plegable summary::after{content:"▾"; margin-left:auto; color:var(--tenue); transition:transform .18s}
+details.plegable[open] summary::after{transform:rotate(180deg)}
+details.plegable summary:hover{background:var(--tinta2)}
+.apunte{font-family:var(--sans); font-size:12px; color:var(--tenue); font-weight:400}
+summary .apunte{margin-left:10px}
+.dentro{border-top:1px solid var(--linea); padding:6px 20px 16px}
+.enlace{display:flex; align-items:center; gap:16px; padding:12px 0; flex-wrap:wrap}
+.enlace + .enlace{border-top:1px solid var(--linea)}
+.enlace .acciones{margin-left:auto; display:flex; gap:8px}
+.enlace .baja{margin-top:0}
+
+@media (max-width:800px){
+  .cabecera{flex-direction:column; gap:14px}
+  .firma{width:100%; max-width:260px}
+}
+
 /* ── teléfono ─────────────────────────────────────────────────────────────── */
 @media (max-width:800px){
   .marco{padding:18px 15px 60px}
