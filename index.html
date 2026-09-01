@@ -158,6 +158,12 @@ async function firmar(bucket, key, seg) {
 }
 const fecha = t => t ? new Date(t).toLocaleString("es-CL", { dateStyle:"medium", timeStyle:"short" }) : "";
 
+// Los alias vienen del nombre de archivo: "jose_maria", "eric". Para mostrarlos se cambia
+// el guion bajo por espacio y se pone mayúscula inicial en cada palabra. Solo para la
+// vista: en la base siguen siendo la clave con que se subieron.
+const titulo = a => (a || "").split("_").filter(Boolean)
+  .map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
+
 async function boot() {
   const { data:{ session } } = await sb.auth.getSession();
   session ? renderApp() : renderLogin();
