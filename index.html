@@ -325,16 +325,45 @@ async function verPersona(pid, p) {
     ${bloque(soloAud, "Audios sin ECG", "voz grabada sin registro cardíaco en paralelo")}
     ${ses.length ? "" : '<div class="pieza vacio">Sin sesiones.</div>'}`;
 
-  // hojas del participante (escritura del pulso · viaje)
-  let hs = "";
-  const hojas = [["escritura_path", "escritura", "Hoja de escritura — el lenguaje del pulso"],
-                 ["viaje_path",     "viaje",     "Hoja del viaje — VFC en el tiempo"]];
-  for (const t of hojas) {
-    const u = await firmar(t[1], p[t[0]]);
-    if (u) hs += `<div class="pieza"><div class="seccion" style="margin-top:0">${t[2]}</div>
-        <a href="${u}" target="_blank" rel="noopener"><img class="lamina" src="${u}" alt="${t[2]}"></a></div>`;
+  // La FIRMA cardíaca va al lado del nombre: es el retrato del pulso de la persona.
+  // Se toma la de la sesión más reciente que tenga una.
+  for (const s of ses) {
+    const u = await firmar("shots", pid + "/" + s.name + "_firma.png");
+    if (u) {
+      document.getElementById("firma-" + pid).innerHTML =
+        `<a href="${u}" target="_blank" rel="noopener" title="firma cardíaca — ${esc(s.name)}">
+           <img src="${u}" alt="firma cardíaca"></a><div class="pie">firma cardíaca</div>`;
+      break;
+    }
   }
-  document.getElementById("hojas").innerHTML = hs;
+
+  // Los POEMAS no se despliegan solos: son largos y taparían el registro. Van detrás de
+  // un <details>, con enlace para abrir en grande y para descargar.
+  const uEsc = await firmar("escritura", p.escritura_path);
+  if (uEsc) document.getElementById("poemas").innerHTML = `
+    <details class="pieza plegable">
+      <summary><span class="ic">✒</span>El poema del pulso<span class="apunte">dos versiones</span></summary>
+      <div class="dentro">
+        <div class="enlace">
+          <div><b>Palabras creadas</b><div class="apunte">las sílabas que el propio pulso dicta</div></div>
+          <div class="acciones">
+            <a class="baja" href="${uEsc}" target="_blank" rel="noopener">abrir</a>
+            <a class="baja" href="${uEsc}" download="poema_${esc(p.alias)}.png">descargar</a>
+          </div>
+        </div>
+        <div class="enlace">
+          <div><b>Adjetivos en mapudungún</b><div class="apunte">los calificativos del pulso — todavía no publicado</div></div>
+          <div class="acciones"><span class="apunte">pendiente</span></div>
+        </div>
+      </div>
+    </details>`;
+
+  // hoja del viaje: ahí ya están el tacograma, la huella, el render, la respiración y el EGG
+  const uVia = await firmar("viaje", p.viaje_path);
+  if (uVia) document.getElementById("hojas").innerHTML =
+    `<div class="pieza"><div class="seccion" style="margin-top:0">Hoja del viaje
+       <em>· VFC en el tiempo, con la respiración y el estómago</em></div>
+     <a href="${uVia}" target="_blank" rel="noopener"><img class="lamina" src="${uVia}" alt="hoja del viaje"></a></div>`;
 
   for (const s of ses) await colgarMedios(pid, s);
 }
