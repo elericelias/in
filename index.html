@@ -303,22 +303,23 @@ async function verPortada() {
   const h = document.getElementById("hoja");
   h.innerHTML = `
     <div class="pieza aire portada">
-      <h2 class="titular">Buscar el lenguaje del corazón</h2>
-      <p>Un corazón nunca late dos veces igual. Entre un latido y el siguiente hay
-      diferencias de milisegundos, y en la forma de cada onda hay variaciones mínimas que
-      cambian con la respiración, con el susto, con la calma, con lo que se está recordando.
-      Este proyecto parte de tomar esas variaciones en serio: no como ruido alrededor de un
-      promedio, sino como algo que podría estar diciendo algo.</p>
+      <h2 class="titular">Un idioma oculto</h2>
+      <p>Hay una capa del cuerpo que trabaja sin testigo: el corazón cambia de ritmo con
+      cada latido, la respiración se altera antes de que uno note qué la alteró, y nada de
+      eso pasa por la conciencia. Este proyecto parte de una sospecha —que esa capa no es
+      ruido sino algo más parecido a una escritura— y construye los medios para poder
+      preguntarlo, sin afirmar todavía que la respuesta sea sí.</p>
 
       <p>La pregunta tiene fundamento. El corazón tiene su propio sistema nervioso —unas
       cuarenta mil neuronas— y cerca del 80% de las fibras del nervio vago van del corazón
       hacia el cerebro, no al revés. Habla más de lo que escucha.</p>
 
       <p>Cada sesión de este archivo funciona así: se registra el electrocardiograma de una
-      persona mientras el instrumento traduce su propio pulso a sonido en tiempo real. Ella
-      escucha su corazón, y ese escuchar le cambia el pulso, que cambia el sonido. Además
-      dice palabras en voz alta, que quedan marcadas en el tiempo del registro para poder
-      preguntarse después qué movió cuál.</p>
+      persona mientras el instrumento traduce su propio pulso a sonido en tiempo real, con
+      otra persona ahí, respondiendo en vivo a lo que pasa. Ella escucha su corazón, y ese
+      escuchar le cambia el pulso, que cambia el sonido — un espejo que, al reflejar,
+      también modifica lo que refleja. Además dice palabras en voz alta, que quedan marcadas
+      en el tiempo del registro.</p>
 
       <p>En paralelo, cada latido se transcribe. Un análisis no supervisado encuentra que
       las formas de onda se agrupan en unas pocas <b>letras</b> recurrentes, esas letras se
@@ -328,10 +329,188 @@ async function verPortada() {
 
       <div id="alfabeto"></div>
 
+      <p>Pero hay una línea que el proyecto trata de no cruzar. Una cosa es el pulso como
+      dato —un número, un promedio, una firma— y otra es lo que ocurre cuando alguien se
+      escucha, en el momento, junto a otra persona, sin poder repetirse. Un patrón
+      irrepetible en el pulso es, en el mejor de los casos, tan propio de alguien como una
+      huella dactilar: identifica, no revela. Lo que pasa en la sala mientras suena es otra
+      cosa, y ningún registro —por completo que sea— la reemplaza. Solo la señala.</p>
+
       <p class="cierre">Lo que ves acá es el archivo de ese trabajo: por persona, su
       electrocardiograma, su voz, los índices de variabilidad, la hoja del viaje y el poema
       que dictó su pulso.</p>
-    </div>`;
+    </div>
+
+    <details class="pieza plegable">
+      <summary><span class="ic">❦</span>Leer el texto completo<span class="apunte">objetivos y razones de la investigación</span></summary>
+      <div class="dentro lectura">
+        <div class="seccion">1 · El punto de partida</div>
+        <p>Hay una capa del cuerpo que trabaja sin permiso y sin testigo. El corazón cambia
+        de ritmo con cada latido, el estómago avanza en ondas lentas, la respiración se
+        altera antes de que uno alcance a notar qué lo alteró. Nada de eso pasa por la
+        conciencia. Y sin embargo ocurre todo el tiempo, y deja rastro.</p>
+        <p>Es, en el sentido que le da Hannah Arendt a la condición humana, la actividad más
+        antigua y más oscura del cuerpo: la labor, lo que se rehace cada día sin dejar obra.
+        El extremo de lo privado — privado de aparecer, privado de ser visto y oído por
+        otros. Nadie está invitado a esa oscuridad, ni siquiera quien la habita.</p>
+        <p>Esta investigación parte de una sospecha: que esa capa no es el ruido de fondo
+        del organismo sino algo más parecido a una escritura, y que no la leemos porque no
+        tenemos con qué. El cuerpo como máquina blanda — un sistema que nunca repite dos
+        veces el mismo gesto, y cuya irregularidad quizá no sea un defecto de la máquina
+        sino el lugar donde está la información. Se busca ahí una firma: no un promedio ni
+        un tipo, sino lo que es de una persona y de nadie más.</p>
+        <p>Detrás de esa sospecha hay una apuesta más amplia, sobre la condición vibrante de
+        la materia: que el cuerpo, como toda materia, no es inerte. Vibra, late, oscila,
+        tiene amplitud y frecuencia propias, exista o no alguien escuchando. Hacer hablar a
+        un órgano es, en el fondo, tomar esa vibración literal —la misma amplitud y
+        frecuencia que describe un electrocardiograma— y dejarla vibrar en otro medio: el
+        aire, como sonido.</p>
+        <p>No se afirma que esa escritura signifique algo. Se construyen los medios para
+        poder preguntarlo.</p>
+
+        <div class="seccion">2 · Registrar</div>
+        <p>El primer objetivo es material: registrar. Cuatro señales que ocurren en
+        paralelo, en una misma persona y en un mismo tiempo: el <b>corazón</b> latido a
+        latido (ECG), el <b>estómago</b> en su ritmo lento de unas tres ondas por minuto
+        (EGG), la <b>respiración</b> —medida y también guiada— y la <b>voz</b>, con lo que
+        la persona dice en voz alta durante la sesión.</p>
+        <p>Se toman con electrodos y un BITalino, y se procesan en Max/MSP y Python. La
+        elección de instrumentos no es incidental: hacía falta algo que registrara y sonara
+        al mismo tiempo, porque la hipótesis de trabajo es que escuchar el propio cuerpo lo
+        modifica, y eso sólo se puede observar si el registro y el estímulo comparten
+        reloj.</p>
+        <p>Registrar es acá el acto central, no un paso previo. Buena parte de lo que se
+        busca es simplemente que esta capa quede escrita en alguna parte y se pueda volver
+        sobre ella.</p>
+
+        <div class="seccion">3 · La variabilidad como lenguaje</div>
+        <p>Un corazón sano no es un metrónomo. Entre un latido y el siguiente hay
+        diferencias de milisegundos, y en la forma de cada onda hay variaciones mínimas. La
+        fisiología ya tiene índices para eso —RMSSD, SDNN, el balance entre bandas de
+        frecuencia, la arritmia sinusal respiratoria— y esta investigación los usa. Pero le
+        interesa además algo que esos índices no capturan: la <b>morfología</b>, la forma
+        concreta de cada pulso, y la posibilidad de que esas formas se agrupen en un
+        repertorio finito, con algo parecido a una gramática.</p>
+        <p>Si fuera así —y es una pregunta abierta, no un resultado— la variabilidad dejaría
+        de ser dispersión estadística para pasar a ser vocabulario.</p>
+        <p>Hay algo más ahí, y es casi una paradoja: cuanto más irregular el ritmo dentro de
+        cierto rango, más sano está el corazón. Un pulso perfectamente regular no es un
+        logro, es una alarma. La variabilidad no es el error del proceso: es la prueba de
+        que ni el proceso más automático del cuerpo es pura repetición. Cada latido ocurre
+        en el cruce entre lo predecible y lo nuevo —lo que se espera y lo que, dentro de
+        eso, empieza de cero—. Se podría decir que ahí, en ese margen, el corazón hace todos
+        los días su propio comienzo.</p>
+
+        <div class="seccion">4 · Expansión y contracción</div>
+        <p>Todas estas señales hacen lo mismo en escalas distintas: abrirse y cerrarse.
+        Sístole y diástole. Inhalar y exhalar. La onda gástrica que avanza. La voz que sale
+        y el silencio que la sigue.</p>
+        <p>Interesa pulsar esos fenómenos: ver cómo se acoplan entre sí, qué tipo de
+        respiración arrastra al corazón y cuál lo suelta, qué pasa con la coherencia entre
+        respiración y pulso cuando alguien se calma o se asusta. Interesa también la
+        interocepción —la capacidad de percibir el estado interno del propio cuerpo— y la
+        pregunta de si se puede afinar haciéndola audible.</p>
+
+        <div class="seccion">5 · Traducir</div>
+        <p>El paisaje interior modelando el paisaje sonoro exterior. Ese es el mecanismo del
+        instrumento: los impulsos eléctricos del cuerpo se traducen a sonido, a imagen y a
+        escritura, y la persona queda dentro de un entorno eléctrico hecho con su propia
+        electricidad.</p>
+        <p>El mismo lenguaje se expresa en medios distintos a propósito. Lo que en una
+        pantalla es una curva, en el aire es un timbre, y en un papel es una palabra.
+        Ninguna de las tres traducciones es la verdadera; se sostienen las tres para ver qué
+        sobrevive al cambio de medio, porque lo que sobrevive es probablemente lo que
+        importa. Los calificativos vienen del mapudungún, que tiene un vocabulario del
+        movimiento y la textura que el castellano técnico no tiene.</p>
+        <p>Ahí hay una distinción que conviene sostener con cuidado, porque el proyecto
+        puede fallar por los dos lados. Una cosa es el pulso como dato de cuantificación
+        —un RMSSD, un puntaje, una clase morfológica—, y otra muy distinta es el pulso
+        vuelto paisaje sonoro que aparece una sola vez, irrepetible, ante quien lo escucha.
+        Lo primero describe un órgano; lo segundo, en el mejor de los casos, deja aparecer
+        algo de una persona. Pero incluso el paisaje sonoro mejor logrado sigue siendo, en
+        rigor, la exposición de un sustrato biológico — y exponer no es lo mismo que
+        revelar. El pulso y los ciclos sonificados son el fondo, no el protagonista. Lo que
+        pasa en la sala mientras suenan es otra cosa, y es lo que en el fondo se está
+        buscando.</p>
+        <p>Hay una versión de este mismo gesto que se puede confundir con la buena y no lo
+        es: tratar el pulso como materia a moldear, algo que se ajusta hasta que se parezca
+        a lo que uno quería. Eso no es escuchar, es fabricar. La diferencia no está en la
+        tecnología —el circuito puede ser idéntico— sino en si el estímulo responde a la
+        persona o la persona termina respondiendo al estímulo hasta parecerse a un
+        objetivo.</p>
+        <p>Ahí aparece también la arista más especulativa del proyecto: la experimentación
+        con la disolución de los límites aparentes. Si el sonido de la sala está hecho con
+        la electricidad de quien lo escucha, y ese sonido a su vez le cambia el pulso, el
+        borde entre cuerpo y entorno se vuelve difícil de trazar. No se propone como
+        afirmación sobre el mundo, sino como una situación construida para poder vivirla y
+        observarla.</p>
+
+        <div class="seccion">6 · El viaje</div>
+        <p>La sesión es el método. Dura alrededor de media hora y funciona como una
+        meditación asistida —respiración guiada, capas de sonido, el propio pulso vuelto
+        sonido, palabras dichas en voz alta— y llega a lo que en el proyecto se llama el
+        viaje hacia las matrices.</p>
+        <p>Ahí ocurre algo que vale la pena describir con precisión, porque es el centro de
+        la hipótesis. Cuando alguien escucha su propio pulso sonificado, pasa a ser por un
+        momento espectador de un proceso que normalmente nadie ve desde adentro —nadie mira
+        su propio corazón latir—. Y al mismo tiempo, lo que siente, piensa o hace al
+        escucharlo es del orden de otra cosa: algo que nadie, ni la persona misma, podía
+        prever de antemano. Es actor y espectador de sí mismo en el mismo instante.</p>
+        <p>Eso podría ser, sin más, una forma de contemplación interior —mirarse por dentro
+        en vez de aparecer frente a otros—, y en ese caso no cambiaría gran cosa: seguiría
+        siendo introspección, la misma de siempre, con audífonos. Lo que la vuelve distinta
+        es que no ocurre a solas. Hay otra persona en la sala, manipulando los estímulos que
+        se generan a partir de esa misma señal, escuchando lo mismo, y respondiendo en vivo
+        a lo que pasa —no ejecutando un protocolo fijo—. Es introspección hecha en compañía.
+        Y ahí el registro deja de ser una fotografía del momento: funciona como espejo, y
+        ese espejo, al reflejar, también cambia lo reflejado, que a su vez cambia lo que el
+        espejo devuelve. Por eso casi nunca se puede aislar con precisión qué estímulo causó
+        qué respuesta: no es necesariamente un defecto de la medición, puede ser la señal de
+        que el circuito está genuinamente cerrado entre dos personas.</p>
+        <p>Lo que ahí aparece —lo que el participante siente, piensa, imagina y hace, junto
+        con quien genera el estímulo— no queda nunca capturado del todo por ninguna capa del
+        registro, por completa que sea. El registro es, en el mejor de los casos, la foto o
+        el video de un momento; lo vivido, no. Y es justamente eso, todo lo que no es un
+        dato, lo que se está buscando cuando se arma una sesión: no una medición más fina,
+        sino la ocasión de que algo así ocurra.</p>
+        <p>Otras cosas se ponen a prueba en el mismo viaje: reconocerse fuera de la mente
+        —una vía de acceso que no pasa por el relato que uno tiene de sí mismo, sino por lo
+        que el cuerpo está haciendo mientras tanto—; la voz como huella —timbre, textura,
+        grano: rasgos que son de una persona y de nadie más, y que quedan en el registro
+        junto a su corazón—; palabras al azar, disparadas sin orden previsible, que producen
+        material que la persona no eligió; la resonancia, un agente de aprendizaje que
+        recorre el espacio de estímulos sonoros buscando cuáles mueven el pulso de cada
+        quien —no para mejorar a nadie, sino para mapear a qué responde cada cuerpo—; y el
+        cuerpo como maestro, la pregunta de si una emoción queda plasmada en el cuerpo de un
+        modo que el cuerpo recuerda y la señal alcanza a mostrar.</p>
+        <p>De todo eso se busca una cartografía del viaje interior. No una interpretación:
+        un mapa. Qué pasó, cuándo, y con qué coincidió.</p>
+
+        <div class="seccion">7 · Lo que no se afirma</div>
+        <p>Conviene decirlo con todas sus letras, porque el terreno se presta a lo
+        contrario.</p>
+        <p>Esto no demuestra que el corazón hable. No mide emociones. No diagnostica. Los
+        índices de variabilidad son sensibles a la postura, a la hora del día, al café, a la
+        conversación previa; y un cambio en el registro no prueba que el estímulo lo haya
+        causado. Varias de las asociaciones que parecen evidentes durante una sesión no
+        resisten después un análisis más estricto — y cuando eso pasa, se anota.</p>
+        <p>Tampoco se afirma que una firma fisiológica, por singular que sea, equivalga a
+        una persona. Un patrón irrepetible en el pulso es, en el mejor de los casos, tan
+        propio de alguien como una huella dactilar — y una huella dactilar identifica a
+        alguien, no lo revela. Hay algo de cada persona que ningún registro, por completo
+        que sea, va a poder definir. Eso no es una falla del instrumento. Es, quizás, la
+        razón de fondo por la que vale la pena seguir construyéndolo: no para cerrar esa
+        pregunta, sino para tener con qué seguir haciéndola.</p>
+        <p>Lo que sí se sostiene es más modesto y más firme: que estas señales existen, que
+        se pueden registrar bien, que varían de maneras que no parecen azar, y que casi
+        nadie las ha escuchado. La investigación consiste en construir los instrumentos para
+        escucharlas y en dejar el registro hecho, para que la pregunta se pueda seguir
+        haciendo —por mí o por otros— con el material a la vista.</p>
+        <p class="cierre">Tecnología usada, al final, para acordarse de algo humano — algo
+        tan simple y tan difícil de sostener como esto: nunca se está más activo que cuando
+        no se hace nada.</p>
+      </div>
+    </details>`;
   const u = await firmar("viaje", "_alfabeto_pulso.png");
   if (u) document.getElementById("alfabeto").innerHTML = `
     <figure class="alfa">
