@@ -899,7 +899,9 @@ async function colgarMedios(pid, s) {
   // Cada registro muestra SOLO su trazado: el ECG y, si se grabó, el EGG del estómago.
   // La huella, el tacograma, el render y la respiración no se repiten acá — todos ya
   // están en la hoja del viaje, arriba, y duplicarlos alargaba la página sin agregar nada.
-  const paneles = [["crudo", "electrocardiograma"], ["egg", "electrogastrograma"]];
+  const paneles = [["crudo", "electrocardiograma"], ["egg", "electrogastrograma"],
+                   ["render", "el corazón que se vio"], ["huella", "la huella"],
+                   ["nube", "la nube de palabras"]];
   let lams = "";
   for (const par of paneles) {
     const u = await firmar("shots", pid + "/" + s.name + "_" + par[0] + ".png");
