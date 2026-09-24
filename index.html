@@ -880,6 +880,7 @@ function tarjeta(s) {
     <div class="cuando">${fecha(s.recorded_at)}${
       s.audio_duration_s ? " · " + Math.round(s.audio_duration_s) + " s de voz" : ""}${
       s.word_count ? " · " + s.word_count + " palabras" : ""}</div>
+    <div id="vi-${s.id}"></div>
     <div id="im-${s.id}"></div>
     <div id="au-${s.id}"></div>
     ${hay ? `<div class="cifras">
@@ -905,6 +906,16 @@ async function colgarMedios(pid, s) {
     if (u) lams += `<figure><figcaption>${par[1]}</figcaption>
         <a href="${u}" target="_blank" rel="noopener"><img class="lamina" src="${u}" alt="${par[1]}"></a></figure>`;
   }
+  // hoja del viaje DE ESTA SESIÓN. La de arriba es la de la persona (su toma
+  // principal); ésta es la de este registro en particular. Si la sesión no la
+  // tiene —o falta correr schema_viaje_sesion.sql— simplemente no se muestra.
+  const cVi = document.getElementById("vi-" + s.id);
+  if (cVi && s.viaje_path) {
+    const uv = await firmar("viaje", s.viaje_path);
+    if (uv) cVi.innerHTML = `<div class="laminas"><figure><figcaption>el viaje de esta sesión</figcaption>
+        <a href="${uv}" target="_blank" rel="noopener"><img class="lamina" src="${uv}" alt="hoja del viaje de la sesión"></a></figure></div>`;
+  }
+
   const cIm = document.getElementById("im-" + s.id);
   if (!cIm) return;
   if (lams) cIm.innerHTML = `<div class="laminas">${lams}</div>`;
