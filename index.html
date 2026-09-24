@@ -902,8 +902,9 @@ async function colgarMedios(pid, s) {
   const paneles = [["crudo", "electrocardiograma"], ["egg", "electrogastrograma"],
                    ["render", "el corazón que se vio"], ["huella", "la huella"],
                    ["nube", "la nube de palabras"],
-                   ["palabras", "el manuscrito: cada latido, una palabra"],
-                   ["adjetivos", "los adjetivos del pulso, en mapudungún"]];
+                   ["poemaprev", "el canto del corazón — cada latido, una palabra en mapudungún"],
+                   ["adjetivos", "los adjetivos del pulso, en mapudungún"],
+                   ["palabras", "el manuscrito: cada latido, una palabra inventada"]];
   let lams = "";
   for (const par of paneles) {
     const u = await firmar("shots", pid + "/" + s.name + "_" + par[0] + ".png");
