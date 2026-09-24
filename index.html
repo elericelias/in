@@ -902,7 +902,6 @@ async function colgarMedios(pid, s) {
   const paneles = [["crudo", "electrocardiograma"], ["egg", "electrogastrograma"],
                    ["render", "el corazón que se vio"], ["huella", "la huella"],
                    ["nube", "la nube de palabras"],
-                   ["poemaprev", "el canto del corazón — cada latido, una palabra en mapudungún"],
                    ["adjetivos", "los adjetivos del pulso, en mapudungún"],
                    ["palabras", "el manuscrito: cada latido, una palabra inventada"]];
   let lams = "";
@@ -919,6 +918,16 @@ async function colgarMedios(pid, s) {
     const uv = await firmar("viaje", s.viaje_path);
     if (uv) cVi.innerHTML = `<div class="laminas"><figure><figcaption>el viaje de esta sesión</figcaption>
         <a href="${uv}" target="_blank" rel="noopener"><img class="lamina" src="${uv}" alt="hoja del viaje de la sesión"></a></figure></div>`;
+  }
+
+  // EL POEMA. Se muestra la VISTA PREVIA (15 versos) porque el poema entero mide
+  // 2700x16194 px — inmostrable en una tarjeta —, y se enlaza al completo.
+  const uPrev = await firmar("shots", pid + "/" + s.name + "_poemaprev.png");
+  if (uPrev) {
+    const uFull = await firmar("shots", pid + "/" + s.name + "_poema.png");
+    lams = `<figure><figcaption>el canto del corazón — cada latido, una palabra en mapudungún${
+             uFull ? ' · <a href="' + uFull + '" target="_blank" rel="noopener">ver el poema completo</a>' : ""}</figcaption>
+        <a href="${uFull || uPrev}" target="_blank" rel="noopener"><img class="lamina" src="${uPrev}" alt="el canto del corazón"></a></figure>` + lams;
   }
 
   const cIm = document.getElementById("im-" + s.id);
