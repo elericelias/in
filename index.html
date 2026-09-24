@@ -901,7 +901,8 @@ async function colgarMedios(pid, s) {
   // están en la hoja del viaje, arriba, y duplicarlos alargaba la página sin agregar nada.
   const paneles = [["crudo", "electrocardiograma"], ["egg", "electrogastrograma"],
                    ["render", "el corazón que se vio"], ["huella", "la huella"],
-                   ["nube", "la nube de palabras"]];
+                   ["nube", "la nube de palabras"],
+                   ["palabras", "lo que dijo el corazón — palabras y adjetivos en mapudungún"]];
   let lams = "";
   for (const par of paneles) {
     const u = await firmar("shots", pid + "/" + s.name + "_" + par[0] + ".png");
