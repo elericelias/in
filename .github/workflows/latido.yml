@@ -1,0 +1,45 @@
+# Latido para que el proyecto de Supabase no se pause.
+#
+# En el plan gratuito, 7 días sin actividad y el proyecto se SUSPENDE: su host deja de
+# resolver, el sitio deja de cargar datos y los respaldos fallan. Ya pasó dos veces, y
+# la segunda estuvimos dos meses sin copia de seguridad sin enterarnos.
+#
+# Hay un agente igual corriendo en el Mac (com.ecg.latido), pero ése sólo late con el
+# computador encendido. Éste no depende de nada local.
+#
+# NO LLEVA SECRETOS: la clave que usa es la publicable (`anon`) que ya está dentro de
+# index.html, en este mismo repositorio público, porque el sitio la necesita para leer.
+# Se lee del archivo en vez de copiarla acá, para que haya una sola fuente de verdad.
+
+name: latido supabase
+
+on:
+  schedule:
+    - cron: "30 11 * * *"      # 08:30 en Chile continental (UTC-3)
+  workflow_dispatch:            # y a mano, desde la pestaña Actions
+
+jobs:
+  latido:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: tocar el proyecto
+        run: |
+          URL=$(grep -o 'https://[a-z0-9]*\.supabase\.co' index.html | head -1)
+          KEY=$(sed -n 's/.*SUPABASE_ANON_KEY *= *"\([^"]*\)".*/\1/p' index.html | head -1)
+          if [ -z "$URL" ] || [ -z "$KEY" ]; then
+            echo "::error::no pude sacar la url o la clave de index.html"; exit 1
+          fi
+          echo "proyecto: $URL"
+          CODE=$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 \
+                 -H "apikey: $KEY" -H "Authorization: Bearer $KEY" \
+                 "$URL/rest/v1/sessions?select=id&limit=1")
+          echo "respuesta: HTTP $CODE"
+          # 200 y 206 son lecturas buenas. Cualquier otra cosa es un problema y tiene
+          # que fallar el job: un latido que se cae en silencio no sirve de nada.
+          case "$CODE" in
+            200|206) echo "✓ el proyecto responde" ;;
+            000)     echo "::error::sin respuesta — ¿proyecto pausado o borrado?"; exit 1 ;;
+            *)       echo "::error::respuesta inesperada ($CODE)"; exit 1 ;;
+          esac
